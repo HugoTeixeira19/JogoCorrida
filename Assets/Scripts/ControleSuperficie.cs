@@ -6,9 +6,15 @@ public class ControleSuperficie : MonoBehaviour
 {
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.CompareTag("corrente"))
-        {
-            Destroy(collision.gameObject, 10);
+        DestruirObjeto(collision, "corrente", 8);
+
+        DestruirObjeto(collision, "objetos", 10);
+    }
+
+    private void DestruirObjeto(Collision2D collision, string tag, float segundos)
+    {
+        if(collision.gameObject.CompareTag(tag)) {
+            Destroy(collision.gameObject, segundos);
         }
     }
 }

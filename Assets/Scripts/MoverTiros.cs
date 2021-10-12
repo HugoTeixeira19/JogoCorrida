@@ -6,7 +6,7 @@ public class MoverTiros : MonoBehaviour
 {
 
     public float velocidade = 55f;
-    public int danoTiro = 10;
+    public int danoTiro = 20;
 
     void Start()
     {
@@ -16,6 +16,7 @@ public class MoverTiros : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Destroy(this.gameObject, 5);
         transform.Translate(Vector2.right * velocidade * Time.deltaTime);
     }
 
@@ -28,7 +29,7 @@ public class MoverTiros : MonoBehaviour
                 float quebra = collision.gameObject.GetComponent<HingeJoint2D>().breakForce;
                 if (quebra > 0)
                 {
-                    quebra -= danoTiro;
+                    quebra = 0;
                 }
             }
         }

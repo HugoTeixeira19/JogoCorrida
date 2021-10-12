@@ -9,6 +9,8 @@ TagManager:
   - tiro
   - corrente
   - cpu
+  - objetos
+  - perigo
   layers:
   - Default
   - TransparentFX
@@ -18,7 +20,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - moeda
   - 
   - 
   - 

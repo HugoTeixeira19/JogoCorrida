@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7985778924023720203}
   m_Layer: 0
   m_Name: arma
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,8 +100,9 @@ MonoBehaviour:
   balas: {fileID: 2948051207558417839, guid: d5fc072723345c84aa6c13a90c1fb2a1, type: 3}
   canoArma: {fileID: 5621505602705870657}
   speed: 5
-  fireRate: 15
+  fireRate: 2
   nextFire: 0
+  mira: {fileID: 0}
 --- !u!1 &3609665681784092406
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,7 +200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7942e77ec891bf24280a3f6c5eccf260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 0
+  tempoFinalizacaoCorrida: 
+  nomePlayer: 
 --- !u!50 &3609665681784092411
 Rigidbody2D:
   serializedVersion: 4

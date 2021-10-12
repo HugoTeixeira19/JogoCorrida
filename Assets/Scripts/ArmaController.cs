@@ -13,7 +13,6 @@ public class ArmaController : MonoBehaviour
     public float fireRate;
     public float nextFire;
 
-
     // Start is called before the first frame update
     void Start()
     {

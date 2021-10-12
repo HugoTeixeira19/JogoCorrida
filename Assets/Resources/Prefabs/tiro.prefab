@@ -122,8 +122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82bfcda02b5c16428938f73534771dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidade: 50
-  danoTiro: 15
+  velocidade: 55
+  danoTiro: 20
 --- !u!50 &2385480069088907295
 Rigidbody2D:
   serializedVersion: 4
@@ -144,4 +144,4 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 6

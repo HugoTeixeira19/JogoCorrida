@@ -2,30 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class carController : MonoBehaviour
+public class carController : PlayerController
 {
     private Controlador controlador;
     float velocidade = 0;
     public static bool estaNaSuperficie = false;
-    
+    private bool desativarCarro = false;
     
 
     void Start()
     {
+        nomePlayer = "Dark Banshir";
         controlador = FindObjectOfType<Controlador>();
     }
 
     void Update()
     {
-        if (estaNaSuperficie)
+        if (!desativarCarro)
         {
             Acelerar();
             Desacelerar();
-        }
-        else
-        {
-            EstabilizarCarro();
-            transform.Translate(new Vector3((velocidade * Time.deltaTime) / 2, 0, 0));
         }
     }
 
@@ -56,10 +52,18 @@ public class carController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("chegada"))
+        if (controlador.FinalizarCorrida(collision, this.gameObject))
         {
+            Debug.Log("Entrou no método");
+            desativarCarro = true;
+            GetComponentInChildren<ArmaController>().enabled = false;
             velocidade = 0;
-            this.enabled = false;
+        }
+        PegarMoedas(collision);
+
+        if(collision.gameObject.CompareTag("perigo"))
+        {
+            controlador.PlayerExplodiu(this.gameObject);
         }
     }
 
@@ -71,14 +75,10 @@ public class carController : MonoBehaviour
             {
                 velocidade = (Input.GetAxis("Vertical") * 18.0f);
             }
-            //transform.Translate(new Vector3(velocidade * Time.deltaTime, 0, 0));
             GetComponent<Rigidbody2D>().AddForce(new Vector2(velocidade * Time.deltaTime, 0), ForceMode2D.Impulse);
-        }
-        else
-        {
-            if (velocidade > 0)
+            if (!estaNaSuperficie)
             {
-                velocidade -= 5.0f;
+                transform.Rotate(new Vector3(0, 0, 0.9f));
             }
         }
     }
@@ -89,30 +89,30 @@ public class carController : MonoBehaviour
         {
             if(velocidade > 0)
             {
-                velocidade -= 0.6f;
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(velocidade * Time.deltaTime, 0), ForceMode2D.Impulse);
+                GetComponent<Rigidbody2D>().AddForce(new Vector2(-12f * Time.deltaTime, 0), ForceMode2D.Impulse);
             }
-        }
-    }
-
-    void EstabilizarCarro()
-    {        
-        if(Input.GetKey(KeyCode.RightArrow))
-        {
-            transform.Rotate(new Vector3(0, 0, -0.8f));
-        }
-        if(Input.GetKey(KeyCode.LeftArrow))
-        {
-            transform.Rotate(new Vector3(0, 0, 0.9f));
+            if (!estaNaSuperficie)
+            {
+                transform.Rotate(new Vector3(0, 0, -0.8f));
+            }
         }
     }
 
     void CarroViradoAoContrario()
     {
-        if (transform.rotation.eulerAngles.z >= 170 && transform.rotation.eulerAngles.z <= 180 
-            || transform.rotation.eulerAngles.z >= -151 && transform.rotation.eulerAngles.z <= -180)
+        if (transform.localEulerAngles.z >= 126 && transform.localEulerAngles.z <= 180 
+            || transform.localEulerAngles.z <= -126 && transform.localEulerAngles.z <= -180)
         {
-            controlador.PlayerExplodiu(this);
+            controlador.PlayerExplodiu(this.gameObject);
+        }
+    }
+
+    void PegarMoedas(Collider2D collision)
+    {
+        if (collision.gameObject.layer == 8)
+        {
+            controlador.AdicionarMoedas = collision.GetComponent<MoedasScript>().valor;
+            Destroy(collision.gameObject);
         }
     }
 }
