@@ -26,11 +26,7 @@ public class MoverTiros : MonoBehaviour
         {
             if (collision.gameObject.GetComponent<HingeJoint2D>() != null)
             {
-                float quebra = collision.gameObject.GetComponent<HingeJoint2D>().breakForce;
-                if (quebra > 0)
-                {
-                    quebra = 0;
-                }
+                collision.gameObject.GetComponent<HingeJoint2D>().breakForce = (collision.gameObject.GetComponent<HingeJoint2D>().breakForce > 0) ? 0 : 0;
             }
         }
 

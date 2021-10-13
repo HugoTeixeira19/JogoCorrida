@@ -5,10 +5,8 @@ using UnityEngine;
 public class ArmaController : MonoBehaviour
 {
     public Vector2 alvo;
-    public float angulo;
     public GameObject balas;
     public GameObject canoArma;
-    public float speed = 5f;
 
     public float fireRate;
     public float nextFire;
@@ -16,7 +14,7 @@ public class ArmaController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+           
     }
 
     // Update is called once per frame
