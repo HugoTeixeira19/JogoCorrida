@@ -7,27 +7,38 @@ public class ArmaController : MonoBehaviour
     public Vector2 alvo;
     public GameObject balas;
     public GameObject canoArma;
+    public GameObject mira;
 
     public float fireRate;
     public float nextFire;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-           
-    }
+    private int maxTiro = 3;
 
     // Update is called once per frame
     void Update()
     {
         alvo = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        transform.right = new Vector3(alvo.x, alvo.y, 0);
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && Time.time > nextFire)
+        transform.right = mira.transform.position;
+    }
+
+    public int GetMaxTiro
+    {
+        get { return maxTiro; }
+    }
+
+    public void AddMunicao()
+    {
+        if(GetMaxTiro == 3)
         {
-            nextFire = Time.time + fireRate;
-            Instantiate(balas, new Vector3(canoArma.transform.position.x, canoArma.transform.position.y, 0),
-                canoArma.transform.rotation);
+            maxTiro = 3;
+        } else
+        {
+            maxTiro += 1;
         }
+    }
+
+    public void Atirou()
+    {
+        this.maxTiro--;
     }
 }

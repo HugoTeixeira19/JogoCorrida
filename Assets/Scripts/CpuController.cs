@@ -5,32 +5,68 @@ using UnityEngine;
 public class CpuController : PlayerController
 {
     // Start is called before the first frame update
-    private float velocidade = 0;
-    private static bool estaNaSuperficie = false;
+    private float speed = 0;
     private Controlador controlador;
     private bool desativarCarro = false;
 
     public GameObject pontoAtualSpawn;
 
+    [SerializeField]
+    private WheelJoint2D wheel;
+    [SerializeField]
+    private WheelJoint2D wheelFront;
+    JointMotor2D jointMotor;
+
+    float sensibilidade = 200f;
+
+    // variável que valida se o veículo está na superficie
+    public bool estaNaSuperficie = false;
+    public GameObject teleporte;
+    public bool destruirVeiculo = false;
+
     void Start()
     {
         nomePlayer = "Armstrong";
         controlador = FindObjectOfType<Controlador>();
+        speed = 100;
     }
 
     // Update is called once per frame
     private void FixedUpdate()
     {
+        wheel.useMotor = estaNaSuperficie;
+        wheelFront.useMotor = estaNaSuperficie;
+
         if (!desativarCarro)
         {
             if (estaNaSuperficie)
             {
-                Acelerar();
+                if (speed < 5000)
+                {
+                    speed += Time.deltaTime * sensibilidade * 5;
+                }
+                else if (speed >= 5000)
+                {
+                    speed = 5000;
+                }
+                else
+                {
+                    speed = 200;
+                }
+
+                jointMotor.maxMotorTorque = 10;
+                jointMotor.motorSpeed = -(speed);
+                wheel.motor = jointMotor;
+                wheelFront.motor = jointMotor;
             }
             else
             {
                 EstabilizarCarro();
-                transform.Translate(new Vector3((velocidade * Time.deltaTime) / 2, 0, 0));
+            }
+
+            if (destruirVeiculo)
+            {
+                controlador.PlayerExplodiu(this.gameObject);
             }
         }
     }
@@ -38,21 +74,16 @@ public class CpuController : PlayerController
     private void OnCollisionEnter2D(Collision2D collision)
     {
         IgnorarColisaoPlayerETiro(collision);
-        if (collision.gameObject.CompareTag("superficie"))
-        {
-            estaNaSuperficie = true;
-            CarroViradoAoContrario();
-        }
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         IgnorarColisaoPlayerETiro(collision);
+    }
 
-        if (collision.gameObject.CompareTag("superficie"))
-        {
-            estaNaSuperficie = false;
-        }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        IgnorarColisaoPlayerETiro(collision);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -61,22 +92,13 @@ public class CpuController : PlayerController
         {
             Debug.Log("Terminou a corrida cpu");
             desativarCarro = true;
-            velocidade = 0;
+            speed = 0;
         }
 
         if (collision.gameObject.CompareTag("perigo"))
         {
             controlador.PlayerExplodiu(this.gameObject);
         }
-    }
-
-    void Acelerar()
-    {
-        if (velocidade < 100)
-        {
-            velocidade = 15.48f;
-        }
-        GetComponent<Rigidbody2D>().AddForce(new Vector2(velocidade * Time.deltaTime, 0), ForceMode2D.Impulse);
     }
 
     void EstabilizarCarro()
@@ -90,24 +112,21 @@ public class CpuController : PlayerController
         }
     }
 
-    void CarroViradoAoContrario()
+    void IgnorarColisaoPlayerETiro(Collision2D collision)
     {
-        if (transform.localEulerAngles.z >= 126 && transform.localEulerAngles.z <= 180
-            || transform.localEulerAngles.z <= -126 && transform.localEulerAngles.z <= -180)
+        if(collision.gameObject.CompareTag("Player"))
         {
-            controlador.PlayerExplodiu(this.gameObject);
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>());
+        }
+
+        if(collision.gameObject.CompareTag("tiro"))
+        {
+            Physics2D.IgnoreCollision(GetComponent<Collider2D>(), collision.gameObject.GetComponent<Collider2D>());
         }
     }
 
-    void IgnorarColisaoPlayerETiro(Collision2D collision)
+    public void Teleporte()
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            Physics2D.IgnoreCollision(collision.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-        }
-        if (collision.gameObject.CompareTag("tiro"))
-        {
-            Physics2D.IgnoreCollision(collision.gameObject.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-        }
+        transform.position = teleporte.transform.position;
     }
 }

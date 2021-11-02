@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,8 +8,9 @@ public class Controlador : MonoBehaviour
 {
     public static Controlador controlador;
     public GameObject pontoAtualSpawn;
-    private carController playerController;
-    public GameObject prefabCarro;
+    private car playerController;
+    public GameObject prefabCarroPlayer;
+    public GameObject prefabCarroCPU;
     
     public GameObject telaFimCorrida;
     public GameObject panelColocacoes;
@@ -20,6 +20,7 @@ public class Controlador : MonoBehaviour
     public TextMeshProUGUI textoTempo;
     public TextMeshProUGUI textoQtdMoedas;
     public TextMeshProUGUI textoTotalMoedas;
+    public TextMeshProUGUI textoQtdAtualBalas;
 
     private mainCameraController mainCamera;
     public List<GameObject> carrosChegaram;
@@ -33,7 +34,7 @@ public class Controlador : MonoBehaviour
         {
             controlador = FindObjectOfType<Controlador>();
         }
-        playerController = FindObjectOfType<carController>();
+        playerController = FindObjectOfType<car>();
         mainCamera = FindObjectOfType<mainCameraController>();
 
         timer = 300f;
@@ -53,6 +54,10 @@ public class Controlador : MonoBehaviour
     private void FixedUpdate()
     {
         AtualizarMoedas();
+        if (playerController != null)
+        {
+            textoQtdAtualBalas.SetText(playerController.GetComponentInChildren<ArmaController>().GetMaxTiro.ToString());
+        }
     }
 
     void AcabouTempo()
@@ -65,26 +70,16 @@ public class Controlador : MonoBehaviour
 
     public void PlayerExplodiu(GameObject player)
     {
-        if (player.GetComponent<carController>() != null)
+        if (player.GetComponent<car>() != null)
         {
             mainCamera.estaAtivo = false;
             Destroy(player);
-            controlador.StartCoroutine(controlador.RespawnPlayer());
         }
         else
         {
             Destroy(player);
             controlador.StartCoroutine(controlador.RespawnCpu());
         }
-    }
-
-    private IEnumerator RespawnPlayer()
-    {
-        yield return new WaitForSeconds(2);
-        Debug.Log("Respawn Player");
-
-        mainCamera.carPersonagem = Instantiate(Resources.Load("Prefabs/CarroPrefab"), pontoAtualSpawn.transform.position, pontoAtualSpawn.transform.rotation) as GameObject;
-        mainCamera.estaAtivo = true;
     }
 
     public bool FinalizarCorrida(Collider2D collision, GameObject carro)
@@ -122,7 +117,7 @@ public class Controlador : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
 
-        Instantiate(Resources.Load("Prefabs/Computer"), pontoAtualSpawn.transform.position, pontoAtualSpawn.transform.rotation);
+        Instantiate(prefabCarroCPU, pontoAtualSpawn.transform.position, pontoAtualSpawn.transform.rotation);
     }
 
     string DisplayTime(float timeToDisplay)

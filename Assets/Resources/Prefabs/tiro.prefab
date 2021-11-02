@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 2948051207558417839}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -312.415, y: 27.214, z: 0}
-  m_LocalScale: {x: 2.6891074, y: 2.04508, z: 0.67967665}
+  m_LocalScale: {x: 0.29007813, y: 0.34206912, z: 0.67967665}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d82bfcda02b5c16428938f73534771dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidade: 55
+  velocidade: 15
   danoTiro: 20
 --- !u!50 &2385480069088907295
 Rigidbody2D:

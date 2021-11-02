@@ -20,9 +20,9 @@ public class mainCameraController : MonoBehaviour
         {
             float x = carPersonagem.transform.position.x;
             float z = carPersonagem.transform.position.z - 50.0f;
-            altura = carPersonagem.transform.position.y + 5.0f;
+            altura = carPersonagem.transform.position.y;
 
-            transform.position = new Vector3(x + 55, altura, z);
+            transform.position = new Vector3(x + 5.0f, altura, z);
         }
     }
 }

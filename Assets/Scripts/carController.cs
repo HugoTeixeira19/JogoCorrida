@@ -8,22 +8,27 @@ public class carController : PlayerController
     float velocidade = 0;
     public static bool estaNaSuperficie = false;
     private bool desativarCarro = false;
-    
 
+
+  
     void Start()
     {
+
         nomePlayer = "Dark Banshir";
         controlador = FindObjectOfType<Controlador>();
     }
 
     void Update()
-    {
+   {
         if (!desativarCarro)
-        {
+       {
             Acelerar();
             Desacelerar();
+
         }
     }
+
+ 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -80,6 +85,8 @@ public class carController : PlayerController
             {
                 transform.Rotate(new Vector3(0, 0, 0.9f));
             }
+
+
         }
     }
 
@@ -115,4 +122,6 @@ public class carController : PlayerController
             Destroy(collision.gameObject);
         }
     }
+
+   
 }
